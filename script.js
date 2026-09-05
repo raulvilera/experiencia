@@ -37,6 +37,8 @@ const form = document.getElementById('activityForm');
 const studentName = document.getElementById('studentName');
 const statusMessage = document.getElementById('statusMessage');
 const storageKey = 'atividade-meteorologia-8ano-respostas';
+// Cole aqui a URL publicada como "Aplicativo da Web" no Google Apps Script.
+const APPS_SCRIPT_URL = '';
 const metadataFields = ['callNumber', 'institutionalEmail', 'raNumber', 'raDigit', 'activityDate'];
 
 function todayAsInputDate() {
@@ -69,7 +71,12 @@ function showStatus(message, error = false) {
 }
 
 function collectAnswers() {
-  const data = { studentName: studentName.value };
+  const data = {
+    submissionId: `meteorologia-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    submittedAt: new Date().toISOString(),
+    activity: 'Equipamentos meteorológicos — Ciências 8º ano',
+    studentName: studentName.value
+  };
   metadataFields.forEach((id) => { data[id] = document.getElementById(id).value; });
   for (let number = 1; number <= 5; number += 1) {
     const selected = document.querySelector(`input[name="q${number}"]:checked`);
@@ -79,6 +86,44 @@ function collectAnswers() {
     data[`q${number}`] = document.getElementById(`q${number}`).value;
   }
   return data;
+}
+
+async function sendAnswers() {
+  if (!studentName.value) {
+    document.getElementById('studentError').textContent = 'Selecione seu nome antes de enviar.';
+    studentName.focus();
+    showStatus('Selecione seu nome antes de enviar.', true);
+    return;
+  }
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    showStatus('Complete todas as questões antes de enviar.', true);
+    return;
+  }
+  if (!APPS_SCRIPT_URL) {
+    showStatus('O envio ainda não está conectado. Configure a URL do Apps Script no arquivo script.js.', true);
+    return;
+  }
+
+  const submitButton = document.getElementById('submitButton');
+  const payload = collectAnswers();
+  submitButton.disabled = true;
+  submitButton.textContent = 'Enviando...';
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    localStorage.removeItem(storageKey);
+    showStatus('Respostas enviadas com sucesso. Obrigado!');
+  } catch (error) {
+    showStatus('Não foi possível enviar agora. Salve as respostas e tente novamente.', true);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Enviar respostas';
+  }
 }
 
 function restoreAnswers() {
@@ -115,6 +160,8 @@ studentName.addEventListener('change', () => {
   fillStudentData();
   document.getElementById('studentError').textContent = '';
 });
+
+document.getElementById('submitButton').addEventListener('click', sendAnswers);
 
 document.getElementById('saveButton').addEventListener('click', () => {
   if (!studentName.value) {
