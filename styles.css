@@ -1,0 +1,96 @@
+:root {
+  --navy: #17324d;
+  --blue: #1e6fa8;
+  --light-blue: #eaf5fb;
+  --border: #cbd9e3;
+  --ink: #20303c;
+  --muted: #5d6b75;
+  --accent: #e5a83b;
+  --white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f2f6f8;
+  color: var(--ink);
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.55;
+}
+
+.container { max-width: 980px; margin: 0 auto; padding: 24px 16px 40px; }
+
+.school-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 26px;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 8px 20px rgba(23, 50, 77, .15);
+}
+
+.school-mark {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border: 2px solid rgba(255,255,255,.8);
+  border-radius: 50%;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+
+h1, h2, p { margin-top: 0; }
+h1 { margin-bottom: 3px; font-size: clamp(1.15rem, 3vw, 1.65rem); letter-spacing: .02em; }
+.school-header p { margin-bottom: 0; color: #dcecf5; }
+
+.activity-heading { padding: 24px 26px 8px; background: var(--white); }
+.activity-heading h2 { color: var(--navy); margin-bottom: 8px; }
+.activity-heading p { color: var(--muted); max-width: 850px; }
+
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-top: 18px; padding: 24px; box-shadow: 0 3px 12px rgba(23, 50, 77, .06); }
+.student-data { display: grid; grid-template-columns: auto minmax(220px, 1fr); align-items: center; gap: 12px; }
+.student-data label { font-weight: 800; color: var(--navy); }
+select, textarea { width: 100%; border: 1px solid #aebfca; border-radius: 8px; padding: 11px 12px; color: var(--ink); background: #fcfeff; font: inherit; }
+select:focus, textarea:focus { outline: 3px solid rgba(30,111,168,.18); border-color: var(--blue); }
+.field-error { grid-column: 2; color: #a52c2c; font-size: .9rem; }
+
+.questions h2 { color: var(--navy); font-size: 1.22rem; border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; }
+.question { margin: 24px 0 0; padding: 18px; border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 8px; background: #fcfeff; }
+.question legend, .essay > label { display: block; font-weight: 650; }
+.question-image { display: block; width: min(100%, 760px); height: auto; margin: 16px auto 14px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.question label:not(legend) { display: block; padding: 7px 8px; margin-top: 5px; border-radius: 6px; cursor: pointer; }
+.question label:not(legend):hover { background: var(--light-blue); }
+.number { display: inline-grid; place-items: center; width: 29px; height: 29px; margin-right: 8px; border-radius: 50%; color: var(--white); background: var(--blue); font-weight: 800; vertical-align: middle; }
+input[type="radio"] { accent-color: var(--blue); margin-right: 6px; }
+.essay textarea { display: block; margin-top: 14px; resize: vertical; min-height: 120px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 22px 0 8px; }
+button { border: 0; border-radius: 8px; padding: 12px 17px; color: var(--white); background: var(--blue); font: inherit; font-weight: 700; cursor: pointer; }
+button:hover { filter: brightness(.92); }
+button.secondary { background: var(--navy); }
+button.text-button { color: var(--navy); background: transparent; text-decoration: underline; }
+.status { min-height: 1.5em; color: #28613d; font-weight: 600; }
+footer { padding: 22px 0 0; text-align: center; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 600px) {
+  .container { padding: 10px 8px 30px; }
+  .school-header, .card, .activity-heading { padding: 18px; }
+  .school-header { align-items: flex-start; }
+  .school-mark { width: 50px; height: 50px; font-size: .85rem; }
+  .student-data { grid-template-columns: 1fr; }
+  .field-error { grid-column: 1; }
+}
+
+@media print {
+  body { background: #fff; }
+  .container { max-width: none; padding: 0; }
+  .school-header { color: #000; background: #fff; border: 2px solid #000; box-shadow: none; }
+  .school-header p, .activity-heading p, footer { color: #000; }
+  .card { box-shadow: none; break-inside: avoid; }
+  .actions, .status { display: none; }
+  textarea { border: 1px solid #777; }
+}
