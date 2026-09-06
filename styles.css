@@ -59,7 +59,7 @@ h1 { margin-bottom: 3px; font-size: clamp(1.15rem, 3vw, 1.65rem); letter-spacing
 .student-data label { font-weight: 800; color: #fff; text-shadow: 0 2px 3px rgba(0,0,0,.72); }
 select, input, textarea { width: 100%; border: 1px solid #aebfca; border-radius: 8px; padding: 11px 12px; color: var(--ink); background: #fcfeff; font: inherit; }
 input[readonly] { background: #f1f6f8; color: #435561; }
-.student-data select, .student-data input { width: min(100%, 680px); justify-self: start; }
+.student-data select, .student-data input { width: min(100%, 680px); justify-self: start; font-weight: 800; }
 #className { width: 260px; }
 #studentName { width: min(100%, 680px); }
 #callNumber { width: 120px; }
