@@ -38,7 +38,7 @@ const studentName = document.getElementById('studentName');
 const statusMessage = document.getElementById('statusMessage');
 const storageKey = 'atividade-meteorologia-8ano-respostas';
 // Cole aqui a URL publicada como "Aplicativo da Web" no Google Apps Script.
-const APPS_SCRIPT_URL = '';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyx85ydEMIp5fQSBdi6wg7YFlfML0Dg0PpK_yT-rqUirFVgoYwuO35XH-Wsga5VfFgd/exec';
 const metadataFields = ['callNumber', 'institutionalEmail', 'raNumber', 'raDigit', 'activityDate'];
 
 function todayAsInputDate() {
