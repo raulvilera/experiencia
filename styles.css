@@ -60,11 +60,12 @@ h1 { margin-bottom: 3px; font-size: clamp(1.15rem, 3vw, 1.65rem); letter-spacing
 select, input, textarea { width: 100%; border: 1px solid #aebfca; border-radius: 8px; padding: 11px 12px; color: var(--ink); background: #fcfeff; font: inherit; }
 input[readonly] { background: #f1f6f8; color: #435561; }
 .student-data select, .student-data input { width: min(100%, 680px); justify-self: start; }
-#className, #studentName { width: min(100%, 680px); }
-#callNumber { width: 180px; }
+#className { width: 260px; }
+#studentName { width: min(100%, 680px); }
+#callNumber { width: 120px; }
 #institutionalEmail { width: min(100%, 520px); }
 #raNumber { width: 220px; }
-#raDigit { width: 120px; }
+#raDigit { width: 100px; }
 #activityDate { width: 200px; }
 select:focus, textarea:focus { outline: 3px solid rgba(30,111,168,.18); border-color: var(--blue); }
 .field-error { grid-column: 2; color: #a52c2c; font-size: .9rem; }
@@ -105,7 +106,8 @@ footer { padding: 22px 0 0; text-align: center; color: var(--muted); font-size: 
   .school-mark { flex-basis: 58px; width: 58px; height: 58px; }
   .student-data { grid-template-columns: 1fr; }
   .field-error { grid-column: 1; }
-  #className, #studentName, #institutionalEmail { width: 100%; max-width: 680px; }
+  #className { width: min(100%, 260px); }
+  #studentName, #institutionalEmail { width: 100%; max-width: 680px; }
   #callNumber, #raNumber, #raDigit, #activityDate { width: 100%; max-width: 240px; }
   .essay-image { width: calc(100% - 32px); margin-left: 16px; margin-right: 16px; }
   .essay textarea { width: calc(100% - 32px); margin-left: 16px; margin-right: 16px; }
