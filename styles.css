@@ -35,12 +35,15 @@ body {
 .school-mark {
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 62px;
-  border: 2px solid rgba(255,255,255,.8);
-  border-radius: 50%;
-  font-weight: 800;
-  letter-spacing: .05em;
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+}
+
+.school-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 h1, h2, p { margin-top: 0; }
@@ -91,7 +94,7 @@ footer { padding: 22px 0 0; text-align: center; color: var(--muted); font-size: 
   .container { padding: 10px 8px 30px; }
   .school-header, .card, .activity-heading { padding: 18px; }
   .school-header { align-items: flex-start; }
-  .school-mark { width: 50px; height: 50px; font-size: .85rem; }
+  .school-mark { flex-basis: 58px; width: 58px; height: 58px; }
   .student-data { grid-template-columns: 1fr; }
   .field-error { grid-column: 1; }
   .essay textarea { width: calc(100% - 32px); margin-left: 16px; margin-right: 16px; }
