@@ -102,7 +102,7 @@ function populateStudents() {
   currentStudents().forEach((student) => {
     const option = document.createElement('option');
     option.value = student.name;
-    option.textContent = `${student.call} — ${student.name}`;
+    option.textContent = student.name;
     studentName.appendChild(option);
   });
   studentName.disabled = !className.value;
