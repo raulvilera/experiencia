@@ -410,6 +410,8 @@ function rebuildDashboard_() {
     .build();
   sheet.insertChart(skillChart);
 
+  buildLearningDoughnuts_(sheet, 35);
+
   sheet.setFrozenRows(6);
   sheet.setColumnWidth(1, 330);
   sheet.setColumnWidth(2, 470);
@@ -417,6 +419,52 @@ function rebuildDashboard_() {
   sheet.setColumnWidth(9, 120);
   sheet.setColumnWidth(10, 100);
   sheet.getRange(1, 1, skillStart + skillRows.length, 13).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
+}
+
+function buildLearningDoughnuts_(sheet, startRow) {
+  const doughnutTitleRow = startRow;
+  const doughnutHeaderRow = startRow + 1;
+  const doughnutDataRow = startRow + 2;
+  const chartTopRow = startRow + 5;
+  const chartHeight = 230;
+  const chartWidth = 285;
+
+  sheet.getRange(doughnutTitleRow, 1, 4, 10).clearContent();
+  sheet.getRange(doughnutTitleRow, 1, 1, 10).merge().setValue('Aprendizagens essenciais — atingidas e não atingidas')
+    .setFontWeight('bold').setFontSize(13).setFontColor(COLORS.white).setBackground(COLORS.header);
+
+  CONFIG.allQuestions.forEach((question, index) => {
+    const column = 1 + (index % 2) * 7;
+    const chartRow = chartTopRow + Math.floor(index / 2) * 15;
+    const skill = CONFIG.skills[question];
+    const skillCriteria = JSON.stringify(skill);
+    const correctFormula = assessmentCountFormula_('J', skillCriteria, 'K', 'Correta');
+    const incorrectFormula = assessmentCountFormula_('J', skillCriteria, 'K', 'Incorreta');
+
+    sheet.getRange(doughnutHeaderRow, column, 1, 2).merge().setValue(`${question} — ${shortSkill_(skill)}`)
+      .setFontWeight('bold').setFontColor(COLORS.header).setWrap(true);
+    sheet.getRange(doughnutDataRow, column, 1, 2).setValues([['Resultado', 'Quantidade']]);
+    formatHeader_(sheet.getRange(doughnutDataRow, column, 1, 2));
+    sheet.getRange(doughnutDataRow + 1, column, 2, 1).setValues([['Atingida'], ['Não atingida']]);
+    sheet.getRange(doughnutDataRow + 1, column + 1, 2, 1).setFormulas([[correctFormula], [incorrectFormula]]);
+
+    const chart = sheet.newChart()
+      .setChartType(Charts.ChartType.PIE)
+      .addRange(sheet.getRange(doughnutDataRow, column, 3, 2))
+      .setOption('title', `${question} — ${shortSkill_(skill)}`)
+      .setOption('pieHole', 0.62)
+      .setOption('colors', ['#2e75b6', '#d9534f'])
+      .setOption('legend', { position: 'bottom' })
+      .setOption('height', chartHeight)
+      .setOption('width', 430)
+      .setPosition(chartRow, column, 0, 0)
+      .build();
+    sheet.insertChart(chart);
+  });
+}
+
+function shortSkill_(skill) {
+  return skill.length > 58 ? `${skill.slice(0, 55)}...` : skill;
 }
 
 function objectiveScore_(payload) {
