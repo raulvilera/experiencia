@@ -177,7 +177,7 @@ document.getElementById('saveButton').addEventListener('click', () => {
 
 document.getElementById('printButton').addEventListener('click', () => window.print());
 
-document.getElementById('clearButton').addEventListener('click', () => {
+  document.getElementById('clearButton').addEventListener('click', () => {
   localStorage.removeItem(storageKey);
   document.getElementById('studentError').textContent = '';
   metadataFields.forEach((id) => { document.getElementById(id).value = id === 'activityDate' ? todayAsInputDate() : ''; });

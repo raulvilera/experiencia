@@ -52,7 +52,7 @@ h1 { margin-bottom: 3px; font-size: clamp(1.15rem, 3vw, 1.65rem); letter-spacing
 .activity-heading p { color: var(--muted); max-width: 850px; }
 
 .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-top: 18px; padding: 24px; box-shadow: 0 3px 12px rgba(23, 50, 77, .06); }
-.student-data { display: grid; grid-template-columns: minmax(150px, auto) minmax(220px, 1fr); align-items: center; gap: 12px; }
+.student-data { display: grid; grid-template-columns: minmax(150px, auto) minmax(220px, 1fr); align-items: center; gap: 12px; background-image: url("assets/fundo-mudancas-climaticas.jpg"); background-position: center; background-size: cover; }
 .student-data label { font-weight: 800; color: var(--navy); }
 select, input, textarea { width: 100%; border: 1px solid #aebfca; border-radius: 8px; padding: 11px 12px; color: var(--ink); background: #fcfeff; font: inherit; }
 input[readonly] { background: #f1f6f8; color: #435561; }
