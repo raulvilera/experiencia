@@ -9,6 +9,7 @@
  */
 
 const CONFIG = {
+  VERSION: '20260906-doughnuts-v1',
   SPREADSHEET_ID: '1VpvIvxX8-ubP89gEPlwfMBXOAo-5op2OpvjXRTP1VqU',
   RESPONSE_SHEETS: {
     '8º Ano A': 'Respostas — 8º Ano A',
@@ -57,7 +58,7 @@ const COLORS = {
 };
 
 function doGet() {
-  return jsonResponse_({ ok: true, service: 'atividade-ciencias-appscript' });
+  return jsonResponse_({ ok: true, service: 'atividade-ciencias-appscript', version: CONFIG.VERSION });
 }
 
 function doPost(event) {
