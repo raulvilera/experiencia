@@ -1,12 +1,12 @@
 # Google Apps Script — recebimento e análise das respostas
 
-O arquivo `Code.gs` recebe as respostas enviadas pela atividade HTML, grava os dados na planilha, corrige automaticamente as cinco questões de múltipla escolha, aplica formatação condicional e constrói o painel de acompanhamento.
+O arquivo `Code.gs` recebe as respostas enviadas pela atividade HTML, grava os dados na planilha, corrige automaticamente as cinco questões de múltipla escolha, aplica formatação condicional e constrói o painel de acompanhamento. A atividade exige a seleção da turma antes da seleção do estudante.
 
 ## Instalação
 
 Abra a planilha [Planilha de respostas](https://docs.google.com/spreadsheets/d/1VpvIvxX8-ubP89gEPlwfMBXOAo-5op2OpvjXRTP1VqU/edit), acesse **Extensões → Apps Script**, apague o conteúdo inicial e cole o conteúdo de `Code.gs`.
 
-Clique em **Salvar** e execute manualmente a função `setup` uma vez. Na primeira execução, o Google solicitará autorização para acessar a planilha. O script criará as abas `Respostas`, `Avaliação`, `Habilidades` e `Painel`.
+Clique em **Salvar** e execute manualmente a função `setup` uma vez. Na primeira execução, o Google solicitará autorização para acessar a planilha. O script criará as abas `Respostas — 8º Ano A`, `Avaliação — 8º Ano A`, `Respostas — 8º Ano B`, `Avaliação — 8º Ano B`, `Habilidades` e `Painel`.
 
 ## Publicação como aplicativo da Web
 
@@ -34,9 +34,9 @@ Publique o `script.js` atualizado no GitHub. O botão **Enviar respostas** envia
 
 ## Organização da planilha
 
-A aba `Respostas` contém uma linha por envio, com os dados do aluno, as dez respostas, a pontuação das objetivas e campos reservados para correção das dissertativas.
+A aba `Respostas — 8º Ano A` e a aba `Respostas — 8º Ano B` contêm uma linha por envio da respectiva turma, com os dados do aluno, as dez respostas, a pontuação das objetivas e campos reservados para correção das dissertativas.
 
-A aba `Avaliação` abre uma linha por questão e por aluno. As questões objetivas recebem automaticamente o status `Correta` ou `Incorreta`. As questões dissertativas recebem inicialmente o status `Pendente`; o professor pode alterar para `Correta`, `Parcial` ou `Incorreta`. A cor azul representa respostas corretas, a vermelha respostas incorretas, a amarela respostas pendentes e a laranja respostas parciais.
+As abas `Avaliação — 8º Ano A` e `Avaliação — 8º Ano B` abrem uma linha por questão e por aluno. As questões objetivas recebem automaticamente o status `Correta` ou `Incorreta`. As questões dissertativas recebem inicialmente o status `Pendente`; o professor pode alterar para `Correta`, `Parcial` ou `Incorreta`. A cor azul representa respostas corretas, a vermelha respostas incorretas, a amarela respostas pendentes e a laranja respostas parciais.
 
 A aba `Habilidades` registra a aprendizagem essencial trabalhada em cada questão. A aba `Painel` apresenta o domínio por questão, o acompanhamento por aprendizagem essencial, o número de envios e a média das questões objetivas.
 

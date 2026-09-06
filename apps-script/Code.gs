@@ -10,8 +10,14 @@
 
 const CONFIG = {
   SPREADSHEET_ID: '1VpvIvxX8-ubP89gEPlwfMBXOAo-5op2OpvjXRTP1VqU',
-  RESPONSE_SHEET: 'Respostas',
-  ASSESSMENT_SHEET: 'Avaliação',
+  RESPONSE_SHEETS: {
+    '8º Ano A': 'Respostas — 8º Ano A',
+    '8º Ano B': 'Respostas — 8º Ano B'
+  },
+  ASSESSMENT_SHEETS: {
+    '8º Ano A': 'Avaliação — 8º Ano A',
+    '8º Ano B': 'Avaliação — 8º Ano B'
+  },
   SKILLS_SHEET: 'Habilidades',
   DASHBOARD_SHEET: 'Painel',
   objectiveQuestions: ['Q1', 'Q2', 'Q3', 'Q4', 'Q5'],
@@ -68,16 +74,18 @@ function doPost(event) {
 /** Execute uma vez manualmente antes da primeira publicação. */
 function setup() {
   const spreadsheet = getSpreadsheet_();
-  const responseSheet = getOrCreateSheet_(spreadsheet, CONFIG.RESPONSE_SHEET);
-  const assessmentSheet = getOrCreateSheet_(spreadsheet, CONFIG.ASSESSMENT_SHEET);
   const skillsSheet = getOrCreateSheet_(spreadsheet, CONFIG.SKILLS_SHEET);
   getOrCreateSheet_(spreadsheet, CONFIG.DASHBOARD_SHEET);
 
-  ensureHeaders_(responseSheet, responseHeaders_());
-  ensureHeaders_(assessmentSheet, assessmentHeaders_());
+  Object.keys(CONFIG.RESPONSE_SHEETS).forEach((className) => {
+    ensureHeaders_(getOrCreateSheet_(spreadsheet, CONFIG.RESPONSE_SHEETS[className]), responseHeaders_());
+    ensureHeaders_(getOrCreateSheet_(spreadsheet, CONFIG.ASSESSMENT_SHEETS[className]), assessmentHeaders_());
+  });
   writeSkillsSheet_(skillsSheet);
-  applyResponseFormatting_(responseSheet);
-  applyAssessmentFormatting_(assessmentSheet);
+  Object.keys(CONFIG.RESPONSE_SHEETS).forEach((className) => {
+    applyResponseFormatting_(spreadsheet.getSheetByName(CONFIG.RESPONSE_SHEETS[className]));
+    applyAssessmentFormatting_(spreadsheet.getSheetByName(CONFIG.ASSESSMENT_SHEETS[className]));
+  });
   rebuildDashboard_();
 
   return `Configuração concluída na planilha: ${spreadsheet.getName()}`;
@@ -97,6 +105,7 @@ function parsePayload_(event) {
     submissionId: clean_(payload.submissionId) || Utilities.getUuid(),
     submittedAt: clean_(payload.submittedAt) || new Date().toISOString(),
     activity: clean_(payload.activity) || 'Equipamentos meteorológicos — Ciências 8º ano',
+    className: clean_(payload.className),
     studentName: clean_(payload.studentName),
     callNumber: clean_(payload.callNumber),
     institutionalEmail: clean_(payload.institutionalEmail),
@@ -104,6 +113,10 @@ function parsePayload_(event) {
     raDigit: clean_(payload.raDigit),
     activityDate: clean_(payload.activityDate)
   };
+
+  if (!CONFIG.RESPONSE_SHEETS[normalized.className]) {
+    throw new Error('Turma inválida ou não informada.');
+  }
 
   CONFIG.allQuestions.forEach((question) => {
     normalized[question] = clean_(payload[question]);
@@ -116,8 +129,8 @@ function appendSubmission_(payload) {
   lock.waitLock(30000);
   try {
     const spreadsheet = getSpreadsheet_();
-    const responseSheet = getOrCreateSheet_(spreadsheet, CONFIG.RESPONSE_SHEET);
-    const assessmentSheet = getOrCreateSheet_(spreadsheet, CONFIG.ASSESSMENT_SHEET);
+    const responseSheet = getOrCreateSheet_(spreadsheet, CONFIG.RESPONSE_SHEETS[payload.className]);
+    const assessmentSheet = getOrCreateSheet_(spreadsheet, CONFIG.ASSESSMENT_SHEETS[payload.className]);
     ensureHeaders_(responseSheet, responseHeaders_());
     ensureHeaders_(assessmentSheet, assessmentHeaders_());
 
@@ -133,6 +146,7 @@ function appendSubmission_(payload) {
       receivedAt,
       payload.submissionId,
       payload.activity,
+      payload.className,
       payload.studentName,
       payload.callNumber,
       payload.institutionalEmail,
@@ -164,6 +178,7 @@ function appendSubmission_(payload) {
       return [
         payload.submissionId,
         receivedAt,
+        payload.className,
         payload.studentName,
         payload.callNumber,
         question,
@@ -196,7 +211,7 @@ function appendSubmission_(payload) {
 
 function responseHeaders_() {
   return [
-    'Recebido em', 'ID do envio', 'Atividade', 'Nome', 'Nº de chamada',
+    'Recebido em', 'ID do envio', 'Atividade', 'Turma', 'Nome', 'Nº de chamada',
     'E-mail institucional', 'RA', 'Dígito do RA', 'Data da atividade',
     'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10',
     'Acertos objetivas', 'Total objetivas', 'Percentual objetivas',
@@ -206,7 +221,7 @@ function responseHeaders_() {
 
 function assessmentHeaders_() {
   return [
-    'ID do envio', 'Recebido em', 'Nome', 'Nº de chamada', 'Questão',
+    'ID do envio', 'Recebido em', 'Turma', 'Nome', 'Nº de chamada', 'Questão',
     'Tipo', 'Resposta do aluno', 'Gabarito', 'Aprendizagem essencial',
     'Status', 'Pontos', 'Observações do professor'
   ];
@@ -237,13 +252,13 @@ function applyResponseFormatting_(sheet) {
   formatHeader_(sheet.getRange(1, 1, 1, headers.length));
   sheet.getRange(1, 1, lastRow, headers.length).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
   sheet.getRange(2, 1, Math.max(lastRow - 1, 1), 1).setNumberFormat('dd/mm/yyyy hh:mm');
-  sheet.getRange(2, 22, Math.max(lastRow - 1, 1), 1).setNumberFormat('0.0%');
+  sheet.getRange(2, 23, Math.max(lastRow - 1, 1), 1).setNumberFormat('0.0%');
 
   const rules = sheet.getConditionalFormatRules().filter((rule) => {
     return !rule.getRanges().some((range) => range.getSheet().getSheetId() === sheet.getSheetId());
   });
   CONFIG.objectiveQuestions.forEach((question, index) => {
-    const column = 10 + index;
+    const column = 11 + index;
     const letter = columnToLetter_(column);
     const key = CONFIG.answerKey[question];
     const range = sheet.getRange(2, column, Math.max(lastRow - 1, 1), 1);
@@ -270,11 +285,11 @@ function applyAssessmentFormatting_(sheet) {
   sheet.setFrozenRows(1);
   formatHeader_(sheet.getRange(1, 1, 1, headers.length));
   sheet.getRange(1, 1, lastRow, headers.length).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
-  sheet.setColumnWidth(7, 360);
-  sheet.setColumnWidth(9, 460);
-  sheet.setColumnWidth(12, 300);
+  sheet.setColumnWidth(8, 360);
+  sheet.setColumnWidth(10, 460);
+  sheet.setColumnWidth(13, 300);
 
-  const statusRange = sheet.getRange(2, 10, Math.max(lastRow - 1, 1), 1);
+  const statusRange = sheet.getRange(2, 11, Math.max(lastRow - 1, 1), 1);
   const validation = SpreadsheetApp.newDataValidation()
     .requireValueInList(['Correta', 'Parcial', 'Incorreta', 'Pendente'], true)
     .setAllowInvalid(false)
@@ -300,6 +315,16 @@ function statusRule_(range, status, background, fontColor) {
     .build();
 }
 
+function assessmentCountFormula_(questionColumn, questionCell, statusColumn, status) {
+  return '=' + Object.values(CONFIG.ASSESSMENT_SHEETS).map((sheetName) =>
+    `COUNTIFS('${sheetName}'!$${questionColumn}:$${questionColumn},${questionCell},'${sheetName}'!$${statusColumn}:$${statusColumn},"${status}")`
+  ).join('+');
+}
+
+function responseSheetFormula_(expression) {
+  return Object.values(CONFIG.RESPONSE_SHEETS).map((sheetName) => expression(sheetName)).join('+');
+}
+
 function rebuildDashboard_() {
   const spreadsheet = getSpreadsheet_();
   const sheet = getOrCreateSheet_(spreadsheet, CONFIG.DASHBOARD_SHEET);
@@ -321,10 +346,10 @@ function rebuildDashboard_() {
   for (let i = 0; i < CONFIG.allQuestions.length; i += 1) {
     const row = 7 + i;
     sheet.getRange(row, 3, 1, 5).setFormulas([[
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$E:$E,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Correta")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$E:$E,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Parcial")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$E:$E,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Incorreta")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$E:$E,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Pendente")`,
+      assessmentCountFormula_('F', `$A${row}`, 'K', 'Correta'),
+      assessmentCountFormula_('F', `$A${row}`, 'K', 'Parcial'),
+      assessmentCountFormula_('F', `$A${row}`, 'K', 'Incorreta'),
+      assessmentCountFormula_('F', `$A${row}`, 'K', 'Pendente'),
       `=IFERROR(C${row}/(C${row}+D${row}+E${row}),0)`
     ]]);
   }
@@ -339,10 +364,10 @@ function rebuildDashboard_() {
   for (let i = 0; i < CONFIG.allQuestions.length; i += 1) {
     const row = skillStart + 1 + i;
     sheet.getRange(row, 2, 1, 5).setFormulas([[
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$I:$I,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Correta")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$I:$I,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Parcial")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$I:$I,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Incorreta")`,
-      `=COUNTIFS('${CONFIG.ASSESSMENT_SHEET}'!$I:$I,$A${row},'${CONFIG.ASSESSMENT_SHEET}'!$J:$J,"Pendente")`,
+      assessmentCountFormula_('J', `$A${row}`, 'K', 'Correta'),
+      assessmentCountFormula_('J', `$A${row}`, 'K', 'Parcial'),
+      assessmentCountFormula_('J', `$A${row}`, 'K', 'Incorreta'),
+      assessmentCountFormula_('J', `$A${row}`, 'K', 'Pendente'),
       `=IFERROR(B${row}/(B${row}+C${row}+D${row}),0)`
     ]]);
   }
@@ -358,8 +383,8 @@ function rebuildDashboard_() {
     ['Média objetiva', ''],
     ['Questões com domínio ≥ 70%', '']
   ]);
-  sheet.getRange('M7').setFormula(`=COUNTA('${CONFIG.RESPONSE_SHEET}'!$B$2:$B)`);
-  sheet.getRange('M8').setFormula(`=IFERROR(AVERAGE('${CONFIG.RESPONSE_SHEET}'!$V$2:$V),0)`).setNumberFormat('0%');
+  sheet.getRange('M7').setFormula(responseSheetFormula_((sheetName) => `COUNTA('${sheetName}'!$B$2:$B)`));
+  sheet.getRange('M8').setFormula(`=IFERROR((${Object.values(CONFIG.RESPONSE_SHEETS).map((sheetName) => `SUM('${sheetName}'!$W$2:$W)`).join('+')})/M7,0)`).setNumberFormat('0%');
   sheet.getRange('M9').setFormula('=COUNTIF(G7:G16,">=70%")');
 
   const questionChart = sheet.newChart()

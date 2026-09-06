@@ -25,9 +25,15 @@
 
     <form id="activityForm">
       <section class="student-data card">
+        <label for="className">TURMA:</label>
+        <select id="className" name="className" required>
+          <option value="">Selecione primeiro a turma</option>
+          <option value="8º Ano A">8º Ano A</option>
+          <option value="8º Ano B">8º Ano B</option>
+        </select>
         <label for="studentName">NOME:</label>
-        <select id="studentName" name="studentName" required>
-          <option value="">Selecione seu nome</option>
+        <select id="studentName" name="studentName" required disabled>
+          <option value="">Selecione primeiro a turma</option>
         </select>
         <span id="studentError" class="field-error" role="alert"></span>
         <label for="callNumber">Nº DE CHAMADA:</label>
