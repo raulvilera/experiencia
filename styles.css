@@ -62,6 +62,7 @@ select:focus, textarea:focus { outline: 3px solid rgba(30,111,168,.18); border-c
 .questions h2 { color: var(--navy); font-size: 1.22rem; border-bottom: 2px solid var(--light-blue); padding-bottom: 10px; }
 .question { margin: 24px 0 0; padding: 18px; border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: 8px; background: #fcfeff; }
 .question legend, .essay > label { display: block; font-weight: 650; }
+.question > legend { padding: 18px 14px 10px; border-radius: 10px; background: rgba(255,255,255,.78); box-shadow: 0 3px 10px rgba(23,50,77,.12); }
 .question-image { display: block; width: min(100%, 760px); height: auto; margin: 16px auto 14px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
 .essay { padding: 0; overflow: hidden; background-image: url("assets/fundo-mudancas-climaticas.jpg"); background-position: center; background-size: cover; }
 .essay > label, .essay > textarea { margin-left: 18px; margin-right: 18px; }
