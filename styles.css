@@ -65,7 +65,7 @@ select:focus, textarea:focus { outline: 3px solid rgba(30,111,168,.18); border-c
 .question-image { display: block; width: min(100%, 760px); height: auto; margin: 16px auto 14px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
 .essay { padding: 0; overflow: hidden; background-image: url("assets/fundo-mudancas-climaticas.jpg"); background-position: center; background-size: cover; }
 .essay > label, .essay > textarea { margin-left: 18px; margin-right: 18px; }
-.essay > label { padding: 18px 0 0; }
+.essay > label { padding: 18px 14px 10px; border-radius: 10px; background: rgba(255,255,255,.78); box-shadow: 0 3px 10px rgba(23,50,77,.12); }
 .alternatives { display: grid; gap: 14px; margin: 16px -2px 2px; padding: 18px; border: 1px solid rgba(255,255,255,.7); border-radius: 14px; background-image: linear-gradient(rgba(18,47,65,.12), rgba(18,47,65,.12)), url("assets/fundo-mudancas-climaticas.jpg"); background-position: center; background-size: cover; box-shadow: inset 0 0 0 1px rgba(23,50,77,.08), 0 8px 18px rgba(23, 50, 77, .10); }
 .alternatives > label { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 10px 12px; margin-top: 0; border: 1px solid rgba(255,255,255,.85); border-radius: 10px; background: rgba(255,255,255,.90); box-shadow: 0 5px 0 rgba(161,180,191,.95), 0 8px 15px rgba(23, 50, 77, .18); cursor: pointer; transition: transform .08s ease, box-shadow .08s ease, background .08s ease; }
 .alternatives > label:hover { background: rgba(255,255,255,.97); }
@@ -74,7 +74,7 @@ select:focus, textarea:focus { outline: 3px solid rgba(30,111,168,.18); border-c
 .alternatives > label:has(input:checked) input[type="radio"] { accent-color: #fff; }
 .number { display: inline-grid; place-items: center; width: 29px; height: 29px; margin-right: 8px; border-radius: 50%; color: var(--white); background: var(--blue); font-weight: 800; vertical-align: middle; }
 input[type="radio"] { flex: 0 0 auto; width: 20px; height: 20px; margin: 0 4px 0 0; accent-color: var(--blue); }
-.essay textarea { display: block; margin-top: 14px; margin-bottom: 18px; resize: vertical; min-height: 150px; line-height: 2; background-color: rgba(255,255,255,.96); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(2em - 1px), #9eb5c2 calc(2em - 1px), #9eb5c2 2em); background-attachment: local; }
+.essay textarea { display: block; width: calc(100% - 76px); margin: 14px 38px 28px; padding: 0 12px; resize: vertical; min-height: 160px; line-height: 2rem; font-family: inherit; background-color: rgba(255,255,255,.95); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(2rem - 1px), #9eb5c2 calc(2rem - 1px), #9eb5c2 2rem); background-position: 0 0; background-attachment: local; border: 2px solid rgba(255,255,255,.95); box-shadow: 0 8px 16px rgba(23,50,77,.22); }
 
 .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 22px 0 8px; }
 button { border: 0; border-radius: 8px; padding: 12px 17px; color: var(--white); background: var(--blue); font: inherit; font-weight: 700; cursor: pointer; }
@@ -92,6 +92,7 @@ footer { padding: 22px 0 0; text-align: center; color: var(--muted); font-size: 
   .school-mark { width: 50px; height: 50px; font-size: .85rem; }
   .student-data { grid-template-columns: 1fr; }
   .field-error { grid-column: 1; }
+  .essay textarea { width: calc(100% - 32px); margin-left: 16px; margin-right: 16px; }
 }
 
 @media print {
