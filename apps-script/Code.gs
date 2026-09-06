@@ -263,13 +263,13 @@ function applyResponseFormatting_(sheet) {
     const key = CONFIG.answerKey[question];
     const range = sheet.getRange(2, column, Math.max(lastRow - 1, 1), 1);
     rules.push(SpreadsheetApp.newConditionalFormatRule()
-      .whenFormulaSatisfied(`=AND(${letter}2<>"",${letter}2="${key}")`)
+      .whenFormulaSatisfied(`=AND(${letter}2<>"";${letter}2="${key}")`)
       .setBackground(COLORS.blue)
       .setFontColor(COLORS.blueText)
       .setRanges([range])
       .build());
     rules.push(SpreadsheetApp.newConditionalFormatRule()
-      .whenFormulaSatisfied(`=AND(${letter}2<>"",${letter}2<>"${key}")`)
+      .whenFormulaSatisfied(`=AND(${letter}2<>"";${letter}2<>"${key}")`)
       .setBackground(COLORS.red)
       .setFontColor(COLORS.redText)
       .setRanges([range])
@@ -317,7 +317,7 @@ function statusRule_(range, status, background, fontColor) {
 
 function assessmentCountFormula_(questionColumn, questionCell, statusColumn, status) {
   return '=' + Object.values(CONFIG.ASSESSMENT_SHEETS).map((sheetName) =>
-    `COUNTIFS('${sheetName}'!$${questionColumn}:$${questionColumn},${questionCell},'${sheetName}'!$${statusColumn}:$${statusColumn},"${status}")`
+    `COUNTIFS('${sheetName}'!$${questionColumn}:$${questionColumn};${questionCell};'${sheetName}'!$${statusColumn}:$${statusColumn};"${status}")`
   ).join('+');
 }
 
@@ -350,7 +350,7 @@ function rebuildDashboard_() {
       assessmentCountFormula_('F', `$A${row}`, 'K', 'Parcial'),
       assessmentCountFormula_('F', `$A${row}`, 'K', 'Incorreta'),
       assessmentCountFormula_('F', `$A${row}`, 'K', 'Pendente'),
-      `=IFERROR(C${row}/(C${row}+D${row}+E${row}),0)`
+      `=IFERROR(C${row}/(C${row}+D${row}+E${row});0)`
     ]]);
   }
   sheet.getRange(7, 7, summaryRows.length, 1).setNumberFormat('0%');
@@ -368,7 +368,7 @@ function rebuildDashboard_() {
       assessmentCountFormula_('J', `$A${row}`, 'K', 'Parcial'),
       assessmentCountFormula_('J', `$A${row}`, 'K', 'Incorreta'),
       assessmentCountFormula_('J', `$A${row}`, 'K', 'Pendente'),
-      `=IFERROR(B${row}/(B${row}+C${row}+D${row}),0)`
+      `=IFERROR(B${row}/(B${row}+C${row}+D${row});0)`
     ]]);
   }
   sheet.getRange(skillStart + 1, 6, skillRows.length, 1).setNumberFormat('0%');
@@ -384,8 +384,8 @@ function rebuildDashboard_() {
     ['Questões com domínio ≥ 70%', '']
   ]);
   sheet.getRange('M7').setFormula(responseSheetFormula_((sheetName) => `COUNTA('${sheetName}'!$B$2:$B)`));
-  sheet.getRange('M8').setFormula(`=IFERROR((${Object.values(CONFIG.RESPONSE_SHEETS).map((sheetName) => `SUM('${sheetName}'!$W$2:$W)`).join('+')})/M7,0)`).setNumberFormat('0%');
-  sheet.getRange('M9').setFormula('=COUNTIF(G7:G16,">=70%")');
+  sheet.getRange('M8').setFormula(`=IFERROR((${Object.values(CONFIG.RESPONSE_SHEETS).map((sheetName) => `SUM('${sheetName}'!$W$2:$W)`).join('+')})/M7;0)`).setNumberFormat('0%');
+  sheet.getRange('M9').setFormula('=COUNTIF(G7:G16;">=70%")');
 
   const questionChart = sheet.newChart()
     .setChartType(Charts.ChartType.COLUMN)

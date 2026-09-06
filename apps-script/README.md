@@ -8,6 +8,8 @@ Abra a planilha [Planilha de respostas](https://docs.google.com/spreadsheets/d/1
 
 Clique em **Salvar** e execute manualmente a função `setup` uma vez. Na primeira execução, o Google solicitará autorização para acessar a planilha. O script criará as abas `Respostas — 8º Ano A`, `Avaliação — 8º Ano A`, `Respostas — 8º Ano B`, `Avaliação — 8º Ano B`, `Habilidades` e `Painel`.
 
+As fórmulas do painel usam ponto e vírgula (`;`) como separador de argumentos porque a planilha está configurada com localidade `pt-BR`. Usar vírgulas nessa planilha provoca `#ERROR!` nas células de indicadores e nos gráficos.
+
 ## Publicação como aplicativo da Web
 
 No editor do Apps Script, selecione **Implantar → Nova implantação**. Escolha o tipo **Aplicativo da Web**. Em “Executar como”, selecione sua conta. Em “Quem tem acesso”, escolha a opção compatível com a política da escola. Para alunos sem login institucional, a opção pública é necessária, mas deve ser usada somente em uma planilha destinada a receber os dados da atividade.
