@@ -40,7 +40,7 @@ A aba `Respostas — 8º Ano A` e a aba `Respostas — 8º Ano B` contêm uma li
 
 As abas `Avaliação — 8º Ano A` e `Avaliação — 8º Ano B` abrem uma linha por questão e por aluno. As questões objetivas recebem automaticamente o status `Correta` ou `Incorreta`. As questões dissertativas recebem inicialmente o status `Pendente`; o professor pode alterar para `Correta`, `Parcial` ou `Incorreta`. A cor azul representa respostas corretas, a vermelha respostas incorretas, a amarela respostas pendentes e a laranja respostas parciais.
 
-A aba `Habilidades` registra a aprendizagem essencial trabalhada em cada questão. A aba `Painel` apresenta o domínio por questão, o acompanhamento por aprendizagem essencial, o número de envios e a média das questões objetivas.
+A aba `Habilidades` registra a aprendizagem essencial trabalhada em cada questão. A aba `Painel` apresenta o domínio por questão, o acompanhamento por aprendizagem essencial, o número de envios, a média das questões objetivas e uma rosca para cada aprendizagem essencial. Nas roscas, **azul** representa aprendizagem atingida e **vermelho** representa aprendizagem não atingida; respostas pendentes não entram no cálculo até serem corrigidas.
 
 ## Alinhamento pedagógico
 
