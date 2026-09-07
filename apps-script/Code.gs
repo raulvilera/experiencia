@@ -9,7 +9,7 @@
  */
 
 const CONFIG = {
-  VERSION: '20260906-doughnuts-v1',
+  VERSION: '20260906-grades-v1',
   SPREADSHEET_ID: '1VpvIvxX8-ubP89gEPlwfMBXOAo-5op2OpvjXRTP1VqU',
   RESPONSE_SHEETS: {
     '8º Ano A': 'Respostas — 8º Ano A',
