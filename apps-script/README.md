@@ -10,6 +10,8 @@ Clique em **Salvar** e execute manualmente a função `setup` uma vez. Na primei
 
 As fórmulas do painel usam ponto e vírgula (`;`) como separador de argumentos porque a planilha está configurada com localidade `pt-BR`. Usar vírgulas nessa planilha provoca `#ERROR!` nas células de indicadores e nos gráficos.
 
+Na aba de respostas, `Nota objetiva (0–5)` é preenchida automaticamente. A `Nota total (0–10)` permanece em branco enquanto as questões dissertativas estiverem com status `Pendente`; depois que o professor informar os pontos das questões Q6 a Q10, essa coluna poderá ser preenchida com a soma da parte objetiva e da parte dissertativa.
+
 ## Publicação como aplicativo da Web
 
 No editor do Apps Script, selecione **Implantar → Nova implantação**. Escolha o tipo **Aplicativo da Web**. Em “Executar como”, selecione sua conta. Em “Quem tem acesso”, escolha a opção compatível com a política da escola. Para alunos sem login institucional, a opção pública é necessária, mas deve ser usada somente em uma planilha destinada a receber os dados da atividade.
