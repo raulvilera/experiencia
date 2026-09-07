@@ -135,10 +135,10 @@ function collectAnswers() {
   metadataFields.forEach((id) => { data[id] = document.getElementById(id).value; });
   for (let number = 1; number <= 5; number += 1) {
     const selected = document.querySelector(`input[name="q${number}"]:checked`);
-    data[`q${number}`] = selected ? selected.value : '';
+    data[`Q${number}`] = selected ? selected.value : '';
   }
   for (let number = 6; number <= 10; number += 1) {
-    data[`q${number}`] = document.getElementById(`q${number}`).value;
+    data[`Q${number}`] = document.getElementById(`q${number}`).value;
   }
   return data;
 }
@@ -198,14 +198,16 @@ function restoreAnswers() {
       if (data[id] && id === 'activityDate') document.getElementById(id).value = data[id];
     });
     for (let number = 1; number <= 5; number += 1) {
-      if (data[`q${number}`]) {
-        const option = document.querySelector(`input[name="q${number}"][value="${data[`q${number}`]}"]`);
+      const savedAnswer = data[`Q${number}`] || data[`q${number}`];
+      if (savedAnswer) {
+        const option = document.querySelector(`input[name="q${number}"][value="${savedAnswer}"]`);
         if (option) option.checked = true;
       }
     }
     for (let number = 6; number <= 10; number += 1) {
       const answer = document.getElementById(`q${number}`);
-      if (answer && data[`q${number}`]) answer.value = data[`q${number}`];
+      const savedAnswer = data[`Q${number}`] || data[`q${number}`];
+      if (answer && savedAnswer) answer.value = savedAnswer;
     }
     showStatus('Respostas salvas anteriormente foram restauradas.');
   } catch (error) {

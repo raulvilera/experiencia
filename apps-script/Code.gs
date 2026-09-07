@@ -120,7 +120,7 @@ function parsePayload_(event) {
   }
 
   CONFIG.allQuestions.forEach((question) => {
-    normalized[question] = clean_(payload[question]);
+    normalized[question] = clean_(payload[question] ?? payload[question.toLowerCase()]);
   });
   return normalized;
 }
@@ -168,7 +168,9 @@ function appendSubmission_(payload) {
       CONFIG.objectiveQuestions.length,
       objectivePercentage_(payload),
       '',
+      objectiveScore_(payload),
       '',
+      'Aguardando correção das dissertativas',
       ''
     ];
     responseSheet.appendRow(responseRow);
@@ -187,7 +189,7 @@ function appendSubmission_(payload) {
         answer,
         objective ? CONFIG.answerKey[question] : '',
         CONFIG.skills[question],
-        objective ? (answer === CONFIG.answerKey[question] ? 'Correta' : 'Incorreta') : 'Pendente',
+        objective ? (answer === CONFIG.answerKey[question] ? 'Correta' : answer ? 'Incorreta' : 'Pendente') : 'Pendente',
         objective ? (answer === CONFIG.answerKey[question] ? 1 : 0) : '',
         ''
       ];
@@ -216,7 +218,8 @@ function responseHeaders_() {
     'E-mail institucional', 'RA', 'Dígito do RA', 'Data da atividade',
     'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10',
     'Acertos objetivas', 'Total objetivas', 'Percentual objetivas',
-    'Correção dissertativas', 'Nota total', 'Observações'
+    'Correção dissertativas', 'Nota objetiva (0–5)', 'Nota total (0–10)',
+    'Status da nota', 'Observações'
   ];
 }
 
@@ -254,6 +257,7 @@ function applyResponseFormatting_(sheet) {
   sheet.getRange(1, 1, lastRow, headers.length).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
   sheet.getRange(2, 1, Math.max(lastRow - 1, 1), 1).setNumberFormat('dd/mm/yyyy hh:mm');
   sheet.getRange(2, 23, Math.max(lastRow - 1, 1), 1).setNumberFormat('0.0%');
+  sheet.getRange(2, 25, Math.max(lastRow - 1, 1), 2).setNumberFormat('0.0');
 
   const rules = sheet.getConditionalFormatRules().filter((rule) => {
     return !rule.getRanges().some((range) => range.getSheet().getSheetId() === sheet.getSheetId());
@@ -498,7 +502,8 @@ function getOrCreateSheet_(spreadsheet, name) {
 
 function ensureHeaders_(sheet, headers) {
   const current = sheet.getRange(1, 1, 1, headers.length).getValues()[0];
-  if (current.every((value) => value === '')) {
+  const matches = headers.every((header, index) => current[index] === header);
+  if (!matches) {
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   }
   formatHeader_(sheet.getRange(1, 1, 1, headers.length));
