@@ -74,7 +74,7 @@ const className = document.getElementById('className');
 const studentName = document.getElementById('studentName');
 const statusMessage = document.getElementById('statusMessage');
 const storageKey = 'atividade-meteorologia-8ano-respostas';
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhUzpfsMWpXMQV6zjWUWfVPGQzHRnGrrMJ6cBldGgdgdmMeDwj4CAsGI9Y3BpMHrM/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdWkaNqJ79WfqGh3mcGAgF39v_MqgrGqmx_5uDO_m7SrSqJsTPP0ZX9vHSdIsljyKp/exec';
 const metadataFields = ['callNumber', 'institutionalEmail', 'raNumber', 'raDigit', 'activityDate'];
 
 function todayAsInputDate() {
